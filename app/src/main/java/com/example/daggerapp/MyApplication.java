@@ -6,8 +6,17 @@ import com.example.daggerapp.di.component.ApplicationComponent;
 import com.example.daggerapp.di.component.DaggerApplicationComponent;
 import com.facebook.stetho.Stetho;
 
-public class MyApplication extends Application {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.HasAndroidInjector;
+
+public class MyApplication extends Application implements HasAndroidInjector {
     ApplicationComponent applicationComponent;
+
+    @Inject
+    DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
     @Override
     public void onCreate() {
@@ -25,5 +34,10 @@ public class MyApplication extends Application {
 
     public ApplicationComponent getApplicationComponent(){
         return applicationComponent;
+    }
+
+    @Override
+    public AndroidInjector<Object> androidInjector() {
+        return dispatchingAndroidInjector;
     }
 }

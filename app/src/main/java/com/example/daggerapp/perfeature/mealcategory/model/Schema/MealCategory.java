@@ -1,4 +1,4 @@
-package com.example.daggerapp.mealcategory.model.Schema;
+package com.example.daggerapp.perfeature.mealcategory.model.Schema;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

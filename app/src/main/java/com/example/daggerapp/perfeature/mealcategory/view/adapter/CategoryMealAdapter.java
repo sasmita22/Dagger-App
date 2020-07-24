@@ -1,31 +1,33 @@
-package com.example.daggerapp.mealcategory.view.adapter;
+package com.example.daggerapp.perfeature.mealcategory.view.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
-import com.example.daggerapp.R;
-import com.example.daggerapp.common.RecyclerViewAdapterContract;
+import com.example.daggerapp.common.contract.RecyclerViewAdapterContract;
 import com.example.daggerapp.common.listener.RecyclerViewOnClickListener;
-import com.example.daggerapp.mealcategory.model.Schema.MealCategory;
+import com.example.daggerapp.databinding.ItemCategoryBinding;
+import com.example.daggerapp.di.qualifier.ActivityContext;
+import com.example.daggerapp.perfeature.mealcategory.model.Schema.MealCategory;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class CategoryMealAdapter extends RecyclerView.Adapter<CategoryMealAdapter.ViewHolder>
 implements RecyclerViewAdapterContract<List<MealCategory>> {
     List<MealCategory> mealCategories;
-    RecyclerViewOnClickListener listener;
+    RecyclerViewOnClickListener<MealCategory> listener;
+
+    @ActivityContext
+    @Inject
     Context context;
 
-    public CategoryMealAdapter(RecyclerViewOnClickListener listener) {
+    @Inject
+    public CategoryMealAdapter(RecyclerViewOnClickListener<MealCategory> listener) {
         this.mealCategories = new ArrayList<>();
         this.listener = listener;
     }
@@ -33,18 +35,18 @@ implements RecyclerViewAdapterContract<List<MealCategory>> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.item_category,parent,false);
-        return new ViewHolder(view);
+        return new ViewHolder(ItemCategoryBinding.inflate(LayoutInflater.from(context), parent,false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        MealCategory mealCategory = mealCategories.get(position);
         Glide.with(context)
-                .load(mealCategories.get(position).getStrCategoryThumb())
+                .load(mealCategory.getStrCategoryThumb())
                 .centerCrop()
-                .into(holder.imageView);
-        holder.title.setText(mealCategories.get(position).getStrCategory());
+                .into(holder.binding.imageView);
+        holder.binding.title.setText(mealCategories.get(position).getStrCategory());
+        holder.binding.getRoot().setOnClickListener(view -> listener.onClickListItem(mealCategory));
     }
 
     @Override
@@ -59,12 +61,10 @@ implements RecyclerViewAdapterContract<List<MealCategory>> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView imageView;
-        TextView title;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imageView = itemView.findViewById(R.id.imageView);
-            title = itemView.findViewById(R.id.title);
+        ItemCategoryBinding binding;
+        public ViewHolder(@NonNull ItemCategoryBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

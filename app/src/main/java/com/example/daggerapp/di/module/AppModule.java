@@ -11,7 +11,7 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-public abstract class ContextModule {
+public abstract class AppModule {
     @Binds
     @PerApplication
     @ApplicationContext

@@ -3,22 +3,22 @@ package com.example.daggerapp.di.component;
 import android.app.Application;
 
 import com.example.daggerapp.MyApplication;
-import com.example.daggerapp.di.module.ContextModule;
-import com.example.daggerapp.di.module.MainActivityModule;
+import com.example.daggerapp.di.module.ActivityModule;
+import com.example.daggerapp.di.module.AppModule;
 import com.example.daggerapp.di.module.RetrofitModule;
 import com.example.daggerapp.di.scope.PerApplication;
 
 import dagger.BindsInstance;
 import dagger.Component;
-import dagger.android.AndroidInjectionModule;
 
 @PerApplication
 @Component(modules = {
-        AndroidInjectionModule.class,
-        ContextModule.class,
+        AppModule.class,
+        ActivityModule.class,
         RetrofitModule.class})
 public interface ApplicationComponent {
-    MainActivityComponent.Builder getMainActivityComponentBuilder();
+    MealCategoryActivityComponent.Factory getMealCategoryActivityComponentFactory();
+    MealByCategoryComponent.Factory getMealByCategoryComponentFactory();
 
     @Component.Builder
     interface Builder{
